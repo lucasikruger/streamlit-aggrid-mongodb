@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  streamlit-mongodb-dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    container_name: streamlit-dashboard
+    # restart: always
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./src:/app
+    command: streamlit run --server.port 8501 app.py 
+
+  mongodb: # mongodb://root:example@localhost:27017/test?authSource=admin
+    image: mongo:jammy
+    container_name: mongodb
+    #restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: test
+    volumes:
+      - ./mongo/data/db:/data/db
